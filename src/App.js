@@ -25,7 +25,6 @@ import ContactDetails from "./Contactmanager/contactDetais"
 import ContactManger2 from "./Contactmanager/ContactManger2"
 import FormElements from "./APICALLS/FormExamples/formElements"
 import {BrowserRouter,Link,Route,Routes} from 'react-router-dom'
-import RegestraionForm from "./assignmets/rejestrationForm"
 import RegistrationForrm from "./assignmets/registratiponForm2"
 
 
