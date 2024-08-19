@@ -28,99 +28,81 @@ class ContactManager extends React.Component{
         }
 
     }
-    // handleChange = (e, keyword) => {
-    //     this.setState({ [`ip${keyword.charAt(0).toUpperCase() + keyword.slice(1)}`]: e.target.value });
-    // }
-    // handleSubmit=(e)=>{
-    //     e.preventDefault()
-    //     axios.post("http://localhost:3001/contactdetails",{
-    //         cname:this.state.ipName,
-    //         cemail:this.state.ipEmail,
-    //         cno:this.state.ipNumber
-    //     }).then((res)=>this.setState({statusMsg:"create user successfully"})).catch((err)=>this.setState({statusMsg:"some error occurred please try again"}))
-    //     axios.get("http://localhost:3001/contactdetails").then((res)=>this.setState({contacts:res.data})).catch
-    //     ((err)=>console.log("error"))
-    // }
     handleSubmit=(e)=>{
         e.preventDefault()
-        axios.post("http://localhost:3001/contactdetails",{
+        if(this.state.isUpdated){
+            console.log(this.state.isId);
+           axios.put(`http://localhost:3001/contactdetails/${this.state.isId}`,
+               { cname: this.state.ipName,
+                cno: this.state.ipNumber,
+                cemail: this.state.ipEmail
+    
+            }).then((res) => {
+                const temp=this.state.contacts;
+                const index=temp.findIndex((item)=>item.id===res.data.id)
+
+                temp.splice(index,1,res.data);
+
+                this.setState({ contacts: temp })
+            }).catch((err) => this.setState({ statusMsg: "some error occurred please try again" }))
+            this.setState({isUpdated:!(this.state.isUpdated)})
+        }
+          
+        else{
+            axios.post("http://localhost:3001/contactdetails",{
             cname:this.state.ipName,
             cemail:this.state.ipEmail,
             cno:this.state.ipNumber
         }).then((res)=>{
-            const temp=[...this.state.contacts,res.data]
-            this.setState({contacts:temp})
+
+            const temp = [...this.state.contacts,res.data]
+
+            this.setState({contacts:temp});
             this.setState({statusMsg:"successfully added"})
-        }).catch((err)=>this.setState({statusMsg:"some error occured"}))
-    }
-        // handleSubmit = (e) => {
-        //     e.preventDefault();
-        //     const { ipName, ipEmail, ipNumber, editingId } = this.state;
-    
-        //     if (editingId) {
-        //         // If an editingId is set, we're updating an existing contact
-        //         axios.patch(`http://localhost:3001/contactdetails/${editingId}`, {
-        //             cname: ipName,
-        //             cemail: ipEmail,
-        //             cno: ipNumber
-        //         })
-        //         .then(() => {
-        //             this.setState({ statusMsg: "Contact successfully updated" });
-        //             this.fetchContacts();
-        //             this.resetForm();
-        //         })
-        //         .catch((err) => this.setState({ statusMsg: "An error occurred. Please try again." }));
-        //     } else {
-        //         // Otherwise, create a new contact
-        //         axios.post("http://localhost:3001/contactdetails", {
-        //             cname: ipName,
-        //             cemail: ipEmail,
-        //             cno: ipNumber
-        //         })
-        //         .then((res) => {
-        //             this.setState((prevState) => ({
-        //                 contacts: [...prevState.contacts, res.data],
-        //                 statusMsg: "Contact successfully added"
-        //             }));
-        //             this.resetForm();
-        //         })
-        //         .catch((err) => this.setState({ statusMsg: "An error occurred. Please try again." }));
-        //     }
-        // }
-    handleUpdate=(e)=>{
-        axios.patch("http://localhost:3001/contactdetails",{cname:"jhony"}).then((res)=>console.log(res)).catch((err)=>console.log(err))
+        }).catch((err)=>this.setState({statusMsg:"some error occurred please try again"}))
+      }
+        
+       
     }
     handleDelete=(e,keyid)=>{
-        e.preventDefault(e)
-        axios.delete(`http://localhost:3001/contactdetails/${keyid}`).then((res)=>console.log(res)).catch((err)=>console.log(err))
-    }
+        axios.delete(`http://localhost:3001/contactdetails/${keyid}`).then((res)=>{
+            //Deletion Using Filter Method
+            const temp = this.state.contacts.filter((item)=>item.id !== keyid) 
+            this.setState({contacts:temp});
+            
+}).catch((error)=>console.log(error))
+}
+
+handleUpdate=(e,keyid)=>{
+   this.setState({isUpdated:!(this.state.isUpdated)})
+   this.setState({isId:keyid})
+}
+    
     render(){
         return(   
-        <>
-            <form>
-                Contact Name:<input type="text" placeholder="enter the name of the contact" onChange={(e)=>this.handleChange(e,"contactname")}></input>
-                Contact Mail:<input type="text" placeholder="Email"onChange={(e)=>this.handleChange(e,"contactemail")} ></input>
-                Contact Number:<input type="text" placeholder="Phone" onChange={(e)=>this.handleChange(e,"contactnumber")}></input>
-                <button onClick={(e)=>this.handleSubmit(e)}>create contact</button>
-                <button onClick={(e)=>this.handleUpdate(e)}>update</button>
-                <button onClick={(e)=>this.handleDelete(e)}>delete</button>
+    <>
+    <form>
+        Contact Name:<input type="text" placeholder="enter the name of the contact" onChange={(e)=>this.handleChange(e,"contactname")}></input>
+        Contact Mail:<input type="text" placeholder="Email"onChange={(e)=>this.handleChange(e,"contactemail")} ></input>
+        Contact Number:<input type="text" placeholder="Phone" onChange={(e)=>this.handleChange(e,"contactnumber")}></input>
+        <button onClick={(e)=>this.handleSubmit(e)}>{(this.state.isUpdated)?"Update Contact":"Create Contact"}</button>
 
-            </form>
-            <p style={{color:"red"}}>{this.state.statusMsg}</p>
-            {
-                this.state.contacts.map((item)=>(
-                    <>
-                    <h2>Name :{item.cname}</h2>
-                    <p>Phone :{item.cno}</p>
-                    <p>Email :{item.cemail}</p>
-                    <button onClick={(e)=>this.handleDelete(e,item.id)}>delete</button>
-                    <button onClick={(e)=>this.handleUpdate(e,item.id)}>update</button>
-                    <br></br>
-                    <hr></hr>
-                    </>
-                ))
-            }
-        </>
+    </form>
+    <p style={{color:"red"}}>{this.state.statusMsg}</p>
+    {
+        this.state.contacts.map((item)=>(
+            <>
+            <h2>Name :{item.cname}</h2>
+            <p>Phone :{item.cno}</p>
+            <p>Email :{item.cemail}</p>
+            <button onClick={(e)=>this.handleDelete(e,item.id)}>Delete</button>
+            <button onClick={(e)=>this.handleUpdate(e,item.id)}>Update</button>
+            <br></br>
+            <hr></hr>
+            </>
+        ))
+    }
+    </>
         )
     }
 }

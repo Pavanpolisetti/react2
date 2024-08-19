@@ -27,9 +27,9 @@ class LifeCycleMethods extends React.Component{
         console.log("snapshot",prevstate)
         return "from snapshot"
     }
-    componentDidUpdate(props,state){
-        console.log("did update",state,snapValue )
-    }
+    // componentDidUpdate(props,state){
+    //     console.log("did update",state,snapValue )
+    // }
     changeCount=()=>{
         this.setState({count:this.state.count+1})
     }

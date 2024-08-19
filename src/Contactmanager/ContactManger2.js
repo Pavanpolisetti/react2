@@ -24,12 +24,12 @@ class ContactManger2 extends React.Component{
         }
 
     }
-    handleSubmit(e){
-        e.preventDefault()
-        axios.post("http://localhost:3001/contactdetails",{
-            c.name:
-        })
-    }
+    // handleSubmit(e){
+    //     e.preventDefault()
+    //     axios.post("http://localhost:3001/contactdetails",{
+    //         c.name:
+    //     })
+    // }
     render(){
         return(
             <form>
