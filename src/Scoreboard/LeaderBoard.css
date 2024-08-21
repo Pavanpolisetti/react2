@@ -1,0 +1,11 @@
+*{
+    background-color: cadetblue;
+}
+th,td{
+    padding: 30px;
+}
+
+
+table{
+    margin-left: 30%;
+}

@@ -24,24 +24,54 @@ import ContactManager from "./Contactmanager/contactDetais"
 import ContactDetails from "./Contactmanager/contactDetais"
 import ContactManger2 from "./Contactmanager/ContactManger2"
 import FormElements from "./APICALLS/FormExamples/formElements"
-import {BrowserRouter,Link,Route,Routes} from 'react-router-dom'
+import {BrowserRouter,Link,NavLink,Route,Routes} from 'react-router-dom'
 import RegistrationForrm from "./assignmets/registratiponForm2"
+import LeaderBoard from "./Scoreboard/LeaderBoard"
+import SortAge from "./Scoreboard/SortAge"
+import SortName from "./Scoreboard/SortName"
+import SortPoints from "./Scoreboard/SortPoints"
+import SortRank from "./Scoreboard/SortRank"
+import LoginPageFunctional from "./RouterHooks/LoginPageFunctional"
+import DashBoardHooks from "./RouterHooks/DashBoardHooks"
+
 
 
 function App(){
     return(
         <>
           
-         
-         {/* <BrowserRouter>
-          <h1>homepage</h1>
-          <Link to="/imagesearch">imageserch</Link>
-         </BrowserRouter>
+           {/* <BrowserRouter>
+            <Routes>
+            <Route path='/' element={<LeaderBoard></LeaderBoard>}></Route>
+            <Route path='/rank' element={<SortRank></SortRank>}></Route>
+            <Route path='/age' element={<SortAge></SortAge>}></Route>
+            <Route path='/points' element={<SortPoints></SortPoints>}></Route>
+            <Route path='/name' element={<SortName></SortName>}></Route>
+            </Routes>
+           </BrowserRouter> */}
+           <BrowserRouter>
+           <NavLink to='/login'>
+           {
+            ({isActive})=>
+            (
+                <button className={isActive?'activeStatus':'inActiveStatus'}>login</button>
+            )
+           }
+           </NavLink>
+           <NavLink to='dashboard/:username/:role'>
+           {
+            ({isActive})=>
+            (
+                <button className={isActive?'activeStatus':'inActiveStatus'}>dashboard</button>
+            )
+           }
+           </NavLink>
+           <Routes>
+            <Route path='/login' element={<LoginPageFunctional></LoginPageFunctional>}></Route>
+            <Route path="/dashboard/:username/:role" element={<DashBoardHooks></DashBoardHooks>}></Route>
+           </Routes>
+           </BrowserRouter>
         
-         <Routes>
-          <Route path="/imagesearch"><FilterClothingProducts/></Route>
-         </Routes> */}
-         <RegistrationForrm/>
          
         </>
 
